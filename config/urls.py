@@ -4,5 +4,6 @@ from blog import views
 
 urlpatterns = [
     path('admin/', admin.site.urls),
-    path('', views.index)
+    path('', views.post_list, name='home'),
+    path('about/', views.about, name='about'),
 ]
