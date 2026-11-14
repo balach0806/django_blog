@@ -20,3 +20,12 @@ def post_detail(request, post_slug):
         raise Http404("Публикация не найдена")
         
     return render(request, 'blog/post_detail.html', {'post': post})
+
+def post_card_fragment(request, post_slug):
+    post = next((item for item in POSTS if item['slug'] == post_slug), None)
+    
+    if not post or not post.get('is_published'):
+        raise Http404("Публикация не найдена")
+        
+    return render(request, 'blog/post_card_include.html', {'post': post})
+
