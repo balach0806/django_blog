@@ -1,0 +1,35 @@
+{% extends "blog/base.html" %}
+{% load static %}
+
+{% block title %}{{ post_title }}{% endblock title %}
+{% block content %}
+    <p style="margin-top: 20px;">
+        <a href="{% url 'home' %}">← Все публикации</a>
+    </p>
+
+    <article class="post-detail">
+        <div class="post-detail-media">
+            {% if post.image %}
+                <img src="{% static 'blog/images/' %}{{ post.image }}" alt="{{ post.title }}">
+            {% else %}
+                <p class="muted">Без иллюстрации</p>
+            {% endif %}
+        </div>
+
+        <div class="post-detail-body">
+            <span class="post-category">{{ post.category.name }}</span>
+            <h1>{{ post.title }}</h1>
+            <p class="muted">Автор: {{ post.author }}</p>
+            
+            <ul class="tags">
+                {% for tag in post.hash_tags %}
+                    <li>{{ tag }}</li>
+                {% endfor %}
+            </ul>
+            
+            <div class="post-detail-text">
+                {{ post.text }}
+            </div>
+        </div>
+    </article>
+{% endblock content %}
