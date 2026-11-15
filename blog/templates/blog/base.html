@@ -6,7 +6,6 @@
     <meta charset="UTF-8">
     <title>{% block title %}Мой блог{% endblock %}</title>
     <link rel="stylesheet" href="{% static 'blog/css/blog.css' %}">
-    {% html_script %}
 </head>
 <body>
     <main class="container">
@@ -14,9 +13,12 @@
             <a href="{% url 'home' %}">Главная</a>
             <a href="{% url 'about' %}">Обо мне</a>
         </nav>
-        
         {% block content %}
         {% endblock %}
     </main>
+    {% block html_script %}
+    {% endblock html_script %}
+    
+    <script src="https://unpkg.com/htmx.org@1.9.10"></script>
 </body>
 </html>

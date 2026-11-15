@@ -1,6 +1,12 @@
 from django.shortcuts import render
-from .data import POSTS
 from django.http import Http404
+from .data import POSTS
+
+def get_published_post_or_404(post_slug):
+    post = next((p for p in POSTS if p.get('slug') == post_slug), None)
+    if not post or not post.get('is_published'):
+        raise Http404("Публикация не найдена")
+    return post
 
 def post_list(request):
     published_posts = [post for post in POSTS if post.get('is_published')]
@@ -14,18 +20,9 @@ def about(request):
     return render(request, 'blog/about.html')
 
 def post_detail(request, post_slug):
-    post = next((p for p in POSTS if p['slug'] == post_slug), None)
-    
-    if not post or not post.get('is_published'):
-        raise Http404("Публикация не найдена")
-        
+    post = get_published_post_or_404(post_slug)
     return render(request, 'blog/post_detail.html', {'post': post})
 
 def post_card_fragment(request, post_slug):
-    post = next((item for item in POSTS if item['slug'] == post_slug), None)
-    
-    if not post or not post.get('is_published'):
-        raise Http404("Публикация не найдена")
-        
+    post = get_published_post_or_404(post_slug)
     return render(request, 'blog/post_card_include.html', {'post': post})
-

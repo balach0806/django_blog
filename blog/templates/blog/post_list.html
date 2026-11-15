@@ -1,15 +1,17 @@
 {% extends "blog/base.html" %}
+{% load static %}
 
-{% block title %}{{ page_title }}{% endblock title %}
+{% block title %}Лента публикаций{% endblock %}
 
 {% block content %}
     <h1>{{ page_title }}</h1>
-
-        <section class="post-list">
-            {% for post in posts %}
-                {% include "blog/post_card_include.html" %}
-            {% endfor %}
-        </section>
+    
+    <section id="posts" class="post-list">
+        {% for post in posts %}
+            {% include "blog/post_card_include.html" with post=post %}
+        {% empty %}
+            <p>Публикаций пока нет.</p>
+        {% endfor %}
+    </section>
 {% endblock content %}
-
 

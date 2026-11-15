@@ -3,8 +3,9 @@
     
     <button type="button" class="post-card__refresh"
             hx-get="{% url 'post_card_fragment' post_slug=post.slug %}"
-            hx-target="#post-body-{{ post.slug }}"
-            hx-swap="innerHTML">
+            hx-target="closest article" 
+            hx-swap="outerHTML">
+        Обновить
     </button>
 
     <div id="post-body-{{ post.slug }}" class="post-card__body">

@@ -121,3 +121,21 @@ a {
   white-space: pre-line;
   line-height: 1.7;
 }
+.post-card__refresh {
+  align-self: flex-start;
+  padding: 6px 12px;
+  border: 1px solid #08795b;
+  border-radius: 8px;
+  background: #08795b;
+  color: white;
+  font: inherit;
+  cursor: pointer;
+}
+.post-card__refresh:hover {
+  background: #065f47;
+}
+.post-card__body {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
