@@ -1,6 +1,6 @@
 from django.shortcuts import render
 from django.http import Http404
-from .data import POSTS
+from .data import POSTS, CATEGORIES
 
 def get_published_post_or_404(post_slug):
     post = next((p for p in POSTS if p.get('slug') == post_slug), None)
@@ -9,10 +9,29 @@ def get_published_post_or_404(post_slug):
     return post
 
 def post_list(request):
+    search_query = request.GET.get("q", "").strip()
+    category_name = request.GET.get("cat", "").strip()
+
     published_posts = [post for post in POSTS if post.get('is_published')]
+
+    if category_name:
+        published_posts = [
+            post for post in published_posts
+            if post.get('category', {}).get('name') == category_name
+        ]
+
+    if search_query:
+        published_posts = [
+            post for post in published_posts
+            if search_query.lower() in post.get('title', '').lower()
+        ]
+
     context = {
         'page_title': "Лента публикаций",
         'posts': published_posts,
+        'categories': CATEGORIES,
+        'q': search_query,
+        'cat': category_name,
     }
     return render(request, 'blog/post_list.html', context)
 
