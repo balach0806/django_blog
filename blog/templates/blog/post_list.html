@@ -1,17 +1,36 @@
 {% extends "blog/base.html" %}
-{% load static %}
 
-{% block title %}Лента публикаций{% endblock %}
+{% block title %}{{ page_title }}{% endblock %}
 
 {% block content %}
-    <h1>{{ page_title }}</h1>
+<h1>{{ page_title }}</h1>
+
+<form method="get" action="{% url 'home' %}" class="search-form">
+    <input type="search" name="q" value="{{ q }}" placeholder="Поиск...">
     
-    <section id="posts" class="post-list">
-        {% for post in posts %}
-            {% include "blog/post_card_include.html" with post=post %}
-        {% empty %}
-            <p>Публикаций пока нет.</p>
+    <fieldset class="search-cats">
+        <label><input type="radio" name="cat" value="" {% if not cat %}checked{% endif %}> Все</label>
+        {% for c in categories %}
+            <label><input type="radio" name="cat" value="{{ c.name }}" {% if cat == c.name %}checked{% endif %}> {{ c.name }}</label>
         {% endfor %}
-    </section>
-{% endblock content %}
+    </fieldset>
+
+    <button type="submit">Найти</button>
+    <a href="{% url 'home' %}">Сбросить</a>
+</form>
+
+<section class="post-list">
+    {% for post in posts %}
+        {% include "blog/post_card_include.html" %}
+    {% empty %}
+        <p>
+            {% if q or cat %}
+                Ничего не найдено. {% if q %}Запрос: {{ q }}. {% endif %} {% if cat %}Категория: {{ cat }}.{% endif %}
+            {% else %}
+                Публикаций пока нет.
+            {% endif %}
+        </p>
+    {% endfor %}
+</section>
+{% endblock %}
 
