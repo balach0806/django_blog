@@ -48,7 +48,6 @@ MIDDLEWARE = [
     'django.middleware.security.SecurityMiddleware',
     'django.contrib.sessions.middleware.SessionMiddleware',
     'django.middleware.common.CommonMiddleware',
-    "django.middleware.common.CommonMiddleware",
     "django_htmx.middleware.HtmxMiddleware",
     'django.middleware.csrf.CsrfViewMiddleware',
     'django.contrib.auth.middleware.AuthenticationMiddleware',
@@ -131,4 +130,12 @@ MAILERS = {
     'default': {
         'BACKEND': 'django.core.mail.backends.console.EmailBackend',
     },
+}
+
+RATING_LABELS = {
+    1: "⭐",
+    2: "⭐⭐",
+    3: "⭐⭐⭐",
+    4: "⭐⭐⭐⭐",
+    5: "⭐⭐⭐⭐⭐"
 }
