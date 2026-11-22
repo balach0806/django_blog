@@ -6,9 +6,7 @@ body {
   margin: 0;
   background: #f3f6f8;
   color: #243340;
-  font:
-    16px/1.5 system-ui,
-    sans-serif;
+  font: 16px/1.5 system-ui, sans-serif;
   overflow-wrap: anywhere;
 }
 
@@ -31,6 +29,10 @@ a {
 
 .post-list {
   align-items: stretch;
+}
+
+.muted {
+  color: #586875;
 }
 
 .post-card {
@@ -76,10 +78,6 @@ a {
   padding: 4px 10px;
   border-radius: 8px;
   background: #e4f0ea;
-}
-
-.muted {
-  color: #586875;
 }
 
 .post-detail {
@@ -167,46 +165,91 @@ a {
 
 .search-form {
   display: flex;
-  flex-wrap: wrap;
-  gap: 12px;
   align-items: center;
+  gap: 8px;
+  margin: 0 0 24px;
+  flex-wrap: wrap;
   background: white;
   padding: 16px;
-  border-radius: 8px;
+  border-radius: 12px;
   border: 1px solid #d8e1e7;
-  margin-bottom: 20px;
 }
 
 .search-form input[type="search"] {
-  padding: 8px;
-  border: 1px solid #ccc;
-  border-radius: 4px;
+  padding: 8px 12px;
+  border: 1px solid #d8e1e7;
+  border-radius: 8px;
+  font: inherit;
+  min-width: 220px;
   flex-grow: 1;
+}
+
+.search-form a {
+  color: #586875;
+  margin-left: 10px;
+  font-size: 14px;
 }
 
 .search-cats {
   display: flex;
-  gap: 10px;
   align-items: center;
-  border: none;
-  margin: 0;
+  gap: 12px;
+  flex-wrap: wrap;
+  border: 0;
   padding: 0;
+  margin: 0;
 }
 
 .search-cats label {
-  display: flex;
+  display: inline-flex;
   align-items: center;
   gap: 4px;
   cursor: pointer;
   font-size: 14px;
 }
 
-.search-form button {
-  padding: 8px 16px;
-  cursor: pointer;
+#results {
+  transition: filter 0.2s ease, opacity 0.2s ease;
 }
 
-.search-form a {
+#results.htmx-request {
+  filter: blur(4px);
+  opacity: 0.6;
+  pointer-events: none;
+}
+
+.pagination {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  gap: 16px;
+  margin-top: 24px;
+  align-items: center;
+}
+
+.pagination__link {
+  padding: 8px 16px;
+  background: white;
+  border: 1px solid #d8e1e7;
+  border-radius: 8px;
+  text-decoration: none;
+  color: #08795b;
+  font-weight: 600;
+}
+
+.pagination__link:hover {
+  background: #f3f6f8;
+}
+
+.pagination__current {
+  font-weight: 600;
   color: #586875;
-  font-size: 14px;
+}
+
+.empty-state {
+  width: 100%;
+  padding: 20px;
+  background: #fff;
+  border-radius: 12px;
+  border: 1px solid #d8e1e7;
 }

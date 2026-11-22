@@ -1,36 +1,80 @@
 {% extends "blog/base.html" %}
+{% load static %}
 
-{% block title %}{{ page_title }}{% endblock %}
+{% block title %}Список публикаций{% endblock title %}
 
 {% block content %}
-<h1>{{ page_title }}</h1>
-
-<form method="get" action="{% url 'home' %}" class="search-form">
-    <input type="search" name="q" value="{{ q }}" placeholder="Поиск...">
+    <h1>Список публикаций</h1>
     
-    <fieldset class="search-cats">
-        <label><input type="radio" name="cat" value="" {% if not cat %}checked{% endif %}> Все</label>
-        {% for c in categories %}
-            <label><input type="radio" name="cat" value="{{ c.name }}" {% if cat == c.name %}checked{% endif %}> {{ c.name }}</label>
-        {% endfor %}
-    </fieldset>
+    <form class="search-form" method="get" action="{% url 'home' %}"
+        hx-get="{% url 'home' %}"
+        hx-trigger="keyup changed delay:500ms from:#search, change"
+        hx-target="#results"
+        hx-swap="innerHTML"
+        hx-indicator="#results">
+        
+        <label for="search">Поиск по заголовку</label>
+        <input id="search" type="search" name="q" value="{{ q }}">
+        
+        <fieldset class="search-cats">
+            <legend>Категория</legend>
+            
+            <label>
+                <input type="radio" name="cat" value="" {% if not cat %}checked{% endif %}>
+                Все категории
+            </label>
+            
+            {% for category in categories %}
+                <label>
+                    <input type="radio" name="cat" value="{{ category.name }}"
+                    {% if cat == category.name %}checked{% endif %}>
+                    {{ category.name }}
+                </label>
+            {% endfor %}
+        </fieldset>
+        
+        <a href="{% url 'home' %}">Сбросить</a>
+    </form>
 
-    <button type="submit">Найти</button>
-    <a href="{% url 'home' %}">Сбросить</a>
-</form>
+    <div id="results">
+        {% partialdef results inline %}
+            
+            <section class="post-list">
+                {% for post in posts %}
+                    {% include "blog/post_card_include.html" with post=post %}
+                {% empty %}
+                    <div class="empty-state">
+                        {% if q or cat %}
+                            <p class="muted"><strong>Ничего не найдено.</strong></p>
+                        {% else %}
+                            <p class="muted">Публикаций пока нет.</p>
+                        {% endif %}
+                    </div>
+                {% endfor %}
+            </section>
 
-<section class="post-list">
-    {% for post in posts %}
-        {% include "blog/post_card_include.html" %}
-    {% empty %}
-        <p>
-            {% if q or cat %}
-                Ничего не найдено. {% if q %}Запрос: {{ q }}. {% endif %} {% if cat %}Категория: {{ cat }}.{% endif %}
-            {% else %}
-                Публикаций пока нет.
+            {% if page_obj.paginator.num_pages > 1 %}
+                <nav class="pagination">
+                    {% if page_obj.has_previous %}
+                        <a class="pagination__link"
+                        href="?q={{ q|urlencode }}&cat={{ cat|urlencode }}&page={{ page_obj.previous_page_number }}"
+                        hx-get="?q={{ q|urlencode }}&cat={{ cat|urlencode }}&page={{ page_obj.previous_page_number }}"
+                        hx-target="#results"
+                        hx-swap="innerHTML">← Назад</a>
+                    {% endif %}
+                    
+                    <span class="pagination__current">{{ page_obj.number }} / {{ page_obj.paginator.num_pages }}</span>
+                    
+                    {% if page_obj.has_next %}
+                        <a class="pagination__link"
+                        href="?q={{ q|urlencode }}&cat={{ cat|urlencode }}&page={{ page_obj.next_page_number }}"
+                        hx-get="?q={{ q|urlencode }}&cat={{ cat|urlencode }}&page={{ page_obj.next_page_number }}"
+                        hx-target="#results"
+                        hx-swap="innerHTML">Вперёд →</a>
+                    {% endif %}
+                </nav>
             {% endif %}
-        </p>
-    {% endfor %}
-</section>
-{% endblock %}
-
+            
+        {% endpartialdef %}
+    </div>
+{% endblock content %}

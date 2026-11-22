@@ -1,5 +1,6 @@
 from django.shortcuts import render
 from django.http import Http404
+from django.core.paginator import Paginator
 from .data import POSTS, CATEGORIES
 
 def get_published_post_or_404(post_slug):
@@ -26,13 +27,21 @@ def post_list(request):
             if search_query.lower() in post.get('title', '').lower()
         ]
 
+    paginator = Paginator(published_posts, 5)
+    page_number = request.GET.get('page')
+    page_obj = paginator.get_page(page_number)
     context = {
         'page_title': "Лента публикаций",
-        'posts': published_posts,
+        'posts': page_obj,
+        'page_obj': page_obj,
         'categories': CATEGORIES,
         'q': search_query,
         'cat': category_name,
     }
+
+    if request.htmx:
+        return render(request, 'blog/post_list.html#results', context)
+
     return render(request, 'blog/post_list.html', context)
 
 def about(request):
