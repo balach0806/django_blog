@@ -1,4 +1,7 @@
 {% load static %}
+
+{% load blog_extras %}
+
 <article class="post-card {% if post.rating > 3 %}post-card--featured{% endif %}">
     
     <button type="button" class="post-card__refresh"
@@ -20,5 +23,11 @@
         </h2>
         <p class="muted">Автор: {{ post.author }} | {{ post.category.name }}</p>
         <p>{{ post.description }}</p>
+
+        <div style="display: flex; gap: 16px; margin-top: auto; font-size: 0.9rem;">
+            <span>Рейтинг: <strong>{{ post.rating|rating_label }}</strong></span>
+            <span>{% plural_ru post.views "просмотр" "просмотра" "просмотров" %}</span>
+        </div>
+
     </div>
 </article>
